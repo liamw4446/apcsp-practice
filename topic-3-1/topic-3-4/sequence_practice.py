@@ -1,32 +1,50 @@
-scores = [72, 85, 91, 68, 88]
+clock_values = [13, 42]
+labels = ["hours", "minutes"]
 
-title = "weekly score report"
+clock_values.append(17)
+labels.append("seconds")
 
-print(scores[0])
+selected_index = 2
+clock_value = clock_values[selected_index]
+label = labels[selected_index]
 
-print(scores[2])
+remaining = clock_value
 
-print(scores[-1])
+bit_1 = remaining % 2
+remaining = remaining // 2
 
-scores[1] = 86
+bit_2 = remaining % 2
+remaining = remaining // 2
 
-print(scores)
+bit_4 = remaining % 2
+remaining = remaining // 2
 
-scores.append(93)
+bit_8 = remaining % 2
+remaining = remaining // 2
 
-print(scores)
+bit_16 = remaining % 2
+remaining = remaining // 2
 
-first_word = title[0:6]
+bit_32 = remaining % 2
 
-last_word = title[13:18]
+bits = [bit_32, bit_16, bit_8, bit_4, bit_2, bit_1]
 
-print(first_word)
-
-print(last_word)
-
-label = last_word + ": " + str(len(scores))
-
-print(label)
-
-print("Scores:", scores)
-
+bit_text = (
+    str(bits[0]) +
+    str(bits[1]) +
+    str(bits[2]) +
+    str(bits[3]) +
+    str(bits[4]) +
+    str(bits[5])
+)
+check_value = (
+    bits[0] * 32 +
+    bits[1] * 16 +
+    bits[2] * 8 +
+    bits[3] * 4 +
+    bits[4] * 2 +
+    bits[5] * 1
+)
+print(label + ": " + str(clock_value) + " -> " + bit_text)
+print("original:", clock_value)
+print("reconstructed:", check_value)
