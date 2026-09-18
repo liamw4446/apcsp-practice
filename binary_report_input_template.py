@@ -1,27 +1,52 @@
-# AP CSP Day 10: input/output scaffold, not a completed binary report.
-# In your existing binary_clock_math.py, preserve your lists, labels, index,
-# conversion, report features, and test comments. Use your existing variable names.
-# These sample lists make this template runnable on its own.
-values = [13, 45, 63]
-labels = ["Sample A", "Sample B", "Sample C"]
-selected_index = 0
+clock_values = [13, 42]
+labels = ["hours", "minutes"]
 
-# PROVIDED INPUT: Run, click the Terminal, type an integer, and press Enter.
-# Text and decimal input handling is outside today's task.
-values[selected_index] = int(input("Enter a number: "))
-clock_value = values[selected_index]
-selected_label = labels[selected_index]
-print("You entered:", clock_value)
+clock_values.append(17)
+labels.append("seconds")
 
-# YOUR CODE START
-# 1. Add a range decision for whole numbers from 0 through 63.
-# 2. Put your existing extraction, bit_text, reconstruction, and report
-#    inside the valid branch. Keep the selected label in the report.
-# 3. Inside that branch, add an even/odd decision using the remainder.
-# 4. In the invalid branch, print only the invalid message after the input echo.
-# YOUR CODE END
+selected_index = 2
+label = labels[selected_index]
 
-# OUTPUT PATTERNS: move/uncomment these only in the appropriate branches.
-# print(selected_label + ": " + bit_text)
-# print("Even")  # or print("Odd")
-# print("Outside six-bit range")
+while True:
+    try:
+        clock_value = int(input(f"Enter a value for {label} (0-63): "))
+    except ValueError:
+        print("Please enter a valid whole number.")
+        continue
+
+    if 0 <= clock_value <= 63:
+        clock_values[selected_index] = clock_value
+        break
+
+    print("Please enter a number between 0 and 63.")
+
+remaining = clock_value
+
+bit_1 = remaining % 2
+remaining //= 2
+bit_2 = remaining % 2
+remaining //= 2
+bit_4 = remaining % 2
+remaining //= 2
+bit_8 = remaining % 2
+remaining //= 2
+bit_16 = remaining % 2
+remaining //= 2
+bit_32 = remaining % 2
+
+bits = [bit_32, bit_16, bit_8, bit_4, bit_2, bit_1]
+bit_text = "".join(str(bit) for bit in bits)
+
+check_value = (
+    bits[0] * 32 + bits[1] * 16 + bits[2] * 8 +
+    bits[3] * 4 + bits[4] * 2 + bits[5] * 1
+)
+
+print(f"{label}: {clock_value} -> {bit_text}")
+print("original:", clock_value)
+print("reconstructed:", check_value)
+
+if clock_value % 2 == 0:
+    print("Even")
+else:
+    print("Odd")
