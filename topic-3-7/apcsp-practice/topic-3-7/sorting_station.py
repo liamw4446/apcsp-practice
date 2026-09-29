@@ -6,19 +6,16 @@ size = int(label[7:10])
 mass = int(label[10:14])
 condition = label[14]
 
-if condition == "D" or size > 50 or mass > 2000:
-    destination = "INSPECT"
+if condition == "D" < 50 or mass > 2000:
+    print("INSPECT")
+elif color == "RED" and shape == "BALL" and size > 10:
+    print("B")
 elif shape == "BALL":
-    if color == "RED" and size > 10:
-        destination = "B"
-    else:
-        destination = "A"
+    print("A")
+elif color == "BLUE" or color == "GREEN" and size <= 10:
+    print("C")
 elif shape == "CUBE":
-    if (color == "BLU" or color == "GRN") and size <= 10:
-        destination = "C"
-    else:
-        destination = "D"
+    print("D")
 else:
-    destination = "E"
+    print("E")
 
-print(destination)
