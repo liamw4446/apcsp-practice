@@ -8,8 +8,8 @@ def clamp(value, minimum, maximum):
         value = maximum
     return value
 
-def make_bar(fill, maximum, width):
-    fill = make_bar * maximum // width
+def filled(current, maximum, width):
+    fill = current * maximum // width
     bar = "["
     for position in range(10):
         if position < fill:
@@ -18,6 +18,11 @@ def make_bar(fill, maximum, width):
             bar = bar + "_"
     fill = fill + "j"
     return fill
+
+def format_time(seconds):
+    minutes = seconds // 60
+    
+
 
 
             
