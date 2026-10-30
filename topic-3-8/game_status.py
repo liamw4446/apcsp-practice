@@ -1,98 +1,84 @@
-"""Game Status: refactor render_status without changing its behavior."""
-
-
 def clamp(value, minimum, maximum):
     if value < minimum:
-        value = minimum
-    elif value > maximum:
-        value = maximum
+        return minimum
+    if value > maximum:
+        return maximum
     return value
 
-def filled(current, maximum, width):
-    fill = current * maximum // width
+
+def make_bar(current, maximum, width):
+    filled = current * width // maximum
     bar = "["
-    for position in range(10):
-        if position < fill:
+    for position in range(width):
+        if position < filled:
             bar = bar + "#"
         else:
-            bar = bar + "_"
-    fill = fill + "j"
-    return fill
+            bar = bar + "-"
+    return bar + "]"
+
 
 def format_time(seconds):
     minutes = seconds // 60
-    
+    remainder = seconds % 60
+    text = str(minutes) + ":"
+    if remainder < 10:
+        text = text + "0"
+    return text + str(remainder)
 
 
-
-            
-
-
-def render_status(name, health, energy, elapsed_seconds, best_seconds, scores):
-    # Keep this function's name, parameters, and returned report.
-    # Add your own helper functions above it.
-
-
-    # Bound the two meters.
-    shown_health = clamp(health, 0, 100)
-    shown_energy = clamp(energy, 0, 60)
-    
-
-    # Build two bars. // keeps the whole-number part of the division.
-    health_bar = make_bar(shown_health, 100, 10)
-    energy_bar = make_bar(shown_energy, 0, 60)
-
-    # Format two durations.
-    elapsed_minutes = elapsed_seconds // 60
-    elapsed_remainder = elapsed_seconds % 60
-    elapsed_text = str(elapsed_minutes) + ":"
-    if elapsed_remainder < 10:
-        elapsed_text = elapsed_text + "0"
-    elapsed_text = elapsed_text + str(elapsed_remainder)
-
-    best_minutes = best_seconds // 60
-    best_remainder = best_seconds % 60
-    best_text = str(best_minutes) + ":"
-    if best_remainder < 10:
-        best_text = best_text + "0"
-    best_text = best_text + str(best_remainder)
-
-    # Summarize the recent scores.
+def total_score(scores):
     total = 0
     for score in scores:
         total = total + score
+    return total
 
+
+def highest_score(scores):
     highest = scores[0]
     for score in scores:
         if score > highest:
             highest = score
+    return highest
 
-    strong_count = 0
+
+def count_at_least(scores, threshold):
+    count = 0
     for score in scores:
-        if score >= 80:
-            strong_count = strong_count + 1
+        if score >= threshold:
+            count = count + 1
+    return count
 
-    # Choose a level from the total.
+
+def choose_level(total):
     if total < 100:
-        level = "Rookie"
-    elif total < 250:
-        level = "Skilled"
-    else:
-        level = "Expert"
+        return "Rookie"
+    if total < 250:
+        return "Skilled"
+    return "Expert"
+
+
+def meter_line(label, value, maximum):
+    shown = clamp(value, 0, maximum)
+    return label + make_bar(shown, maximum, 10) + " " + str(shown) + "/" + str(maximum)
+
+
+def render_status(name, health, energy, elapsed_seconds, best_seconds, scores):
+    # Keep this function's name, parameters, and returned report.
+    total = total_score(scores)
 
     # Return one report. \n separates its lines; there is no final \n.
     report = "PLAYER: " + name
-    report = report + "\nHealth  " + health_bar + " " + str(shown_health) + "/100"
-    report = report + "\nEnergy  " + energy_bar + " " + str(shown_energy) + "/60"
-    report = report + "\nLevel:  " + level
-    report = report + "\nTime:   " + elapsed_text
-    report = report + "\nBest:   " + best_text
+    report = report + "\n" + meter_line("Health  ", health, 100)
+    report = report + "\n" + meter_line("Energy  ", energy, 60)
+    report = report + "\nLevel:  " + choose_level(total)
+    report = report + "\nTime:   " + format_time(elapsed_seconds)
+    report = report + "\nBest:   " + format_time(best_seconds)
     report = report + "\nRecent: total=" + str(total)
-    report = report + ", best=" + str(highest) + ", 80+=" + str(strong_count)
+    report = report + ", best=" + str(highest_score(scores))
+    report = report + ", 80+=" + str(count_at_least(scores, 80))
     return report
 
 
-# Supplied demo. This guard keeps the demo from running when tests import the file.
 if __name__ == "__main__":
     print(render_status("Nova", 75, 18, 125, 119, [40, 50, 90]))
     print()
