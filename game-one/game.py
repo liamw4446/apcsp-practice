@@ -5,7 +5,6 @@ ROCK, PAPER, SCISSORS = 0, 1, 2
 NAMES = ["rock", "paper", "scissors"]
  
  
-# ---------- Game rules (no printing, no input, no random) ----------
  
 def round_result(move1, move2):
     """Return "win", "lose", or "tie" for player 1."""
@@ -34,8 +33,7 @@ def match_winner(score1, score2):
     return "Draw"
  
  
-# ---------- Players: all take (round_number, opponent_previous) ----------
- 
+
 def beat_last_strategy(round_number, opponent_previous):
     """Play the move that beats the opponent's last move. Start with paper."""
     if opponent_previous == -1:
@@ -68,7 +66,7 @@ def choose_player(choice):
     return players.get(choice)
  
  
-# ---------- Playing the game ----------
+
  
 def play_game(player1, player2, rounds=5):
     """Play the match, print each round, return the final scores."""
